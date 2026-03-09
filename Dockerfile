@@ -29,8 +29,10 @@ RUN apt-get update && apt-get install -y \
 # Install n8n globally
 RUN npm install -g n8n
 
-# Install Python packages
-RUN pip3 install playwright --break-system-packages
+# Install Python packages via venv to avoid system pip restrictions
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install playwright
 
 # Tell Playwright to use system Chromium instead of downloading its own
 ENV PLAYWRIGHT_BROWSERS_PATH=/usr/bin
